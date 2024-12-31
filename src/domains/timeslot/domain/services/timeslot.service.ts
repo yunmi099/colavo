@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { RequestBodyDto } from '../dto/request-body.dto';
-import { DayTimetable } from '../dto/date-timatable.dto';
+import { DayTimetableDto } from '../dto/date-timatable.dto';
 import { TimeslotOutAdapter } from '../../out/adapter/timeslotOutAdapter';
 import {
   convertToUnixTimestamp,
@@ -17,7 +17,7 @@ export class TimeslotService {
 
   async generateTimeSlots(
     requestBody: RequestBodyDto,
-  ): Promise<DayTimetable[]> {
+  ): Promise<DayTimetableDto[]> {
     const {
       start_day_identifier,
       timezone_identifier,
@@ -29,7 +29,7 @@ export class TimeslotService {
     } = requestBody;
 
     const startDayTimestamp = convertToUnixTimestamp(start_day_identifier);
-    const results: DayTimetable[] = [];
+    const results: DayTimetableDto[] = [];
 
     for (let i = 0; i < days; i++) {
       const currentDayTimestamp = addDaysToTimestamp(startDayTimestamp, i);

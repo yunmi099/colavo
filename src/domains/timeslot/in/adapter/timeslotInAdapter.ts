@@ -1,6 +1,6 @@
 import { RequestBodyDto } from '../../domain/dto/request-body.dto';
-import { DayTimetable } from '../../domain/dto/date-timatable.dto';
+import { DayTimetableDto } from '../../domain/dto/date-timatable.dto';
 
 export interface TimeslotInAdapter {
-  getTimeSlots(requestBody: RequestBodyDto): Promise<DayTimetable[]>;
+  getTimeSlots(requestBody: RequestBodyDto): Promise<DayTimetableDto[]>;
 }

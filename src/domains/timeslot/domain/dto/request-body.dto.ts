@@ -6,4 +6,7 @@ export class RequestBodyDto {
   timeslot_interval?: number = 1800; // Default: 30 minutes
   is_ignore_schedule?: boolean = false;
   is_ignore_workhour?: boolean = false;
+  constructor(partial: Partial<RequestBodyDto>) {
+    Object.assign(this, partial);
+  }
 }
