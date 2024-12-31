@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { RequestBodyDto } from '../dto/request-body.dto';
+import { TimeslotParameter } from '../dto/timeslot-parameter.dto';
 import { DayTimetableDto } from '../dto/date-timatable.dto';
 import { TimeslotOutAdapter } from '../../out/adapter/timeslotOutAdapter';
 import {
@@ -16,7 +16,7 @@ export class TimeslotService {
   ) {}
 
   async generateTimeSlots(
-    requestBody: RequestBodyDto,
+    requestBody: TimeslotParameter,
   ): Promise<DayTimetableDto[]> {
     const {
       start_day_identifier,

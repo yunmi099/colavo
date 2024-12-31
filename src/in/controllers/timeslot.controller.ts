@@ -1,6 +1,6 @@
 import { Controller, Post, Body } from '@nestjs/common';
 import { TimeslotService } from '../../domains/timeslot/domain/services/timeslot.service';
-import { RequestBodyDto } from '../../domains/timeslot/domain/dto/request-body.dto';
+import { TimeslotParameter } from '../../domains/timeslot/domain/dto/timeslot-parameter.dto';
 import { DayTimetableDto } from 'src/domains/timeslot/domain/dto/date-timatable.dto';
 import { TimeslotInAdapter } from 'src/domains/timeslot/in/adapter/timeslotInadapter';
 import { RequestBody } from '../request/requestBody';
@@ -17,7 +17,7 @@ export class TimeslotController implements TimeslotInAdapter {
   async getTimeSlots(@Body() requestBody: RequestBody): Promise<ResponseBody> {
     const timeslots: DayTimetableDto[] =
       await this.timeslotService.generateTimeSlots(
-        new RequestBodyDto(requestBody),
+        new TimeslotParameter(requestBody),
       );
     return timeslots;
   }
