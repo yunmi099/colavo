@@ -24,7 +24,9 @@ export class FilterTimeslot implements TimeslotOutAdapter {
     try {
       const data = fs.readFileSync(filePath, 'utf8');
       const parsed = JSON.parse(data);
-      return parsed.map((event: any) => Event.fromJson(event));
+      return parsed
+        .filter((event: any) => event.begin_at < event.end_at) // 유효성 검사
+        .map((event: any) => Event.fromJson(event));
     } catch (err) {
       console.error(`Error loading events from ${filePath}`, err);
       return [];
@@ -35,7 +37,14 @@ export class FilterTimeslot implements TimeslotOutAdapter {
     try {
       const data = fs.readFileSync(filePath, 'utf8');
       const parsed = JSON.parse(data);
-      return parsed.map((wh: any) => Workhour.fromJson(wh));
+      return parsed
+        .filter(
+          (wh: any) =>
+            wh.open_interval < wh.close_interval &&
+            wh.weekday >= 1 &&
+            wh.weekday <= 7,
+        ) // 유효성 검사
+        .map((wh: any) => Workhour.fromJson(wh));
     } catch (err) {
       console.error(`Error loading workhours from ${filePath}`, err);
       return [];
@@ -58,12 +67,13 @@ export class FilterTimeslot implements TimeslotOutAdapter {
       return !isOverlapped;
     });
   }
-
   filterSlotsByWorkhour(
     slots: Timeslot[],
     dayOfWeek: number,
   ): { slots: Timeslot[]; is_day_off: boolean } {
     const workhour = this.workhours.find((wh) => wh.isForDay(dayOfWeek));
+
+    console.log('Found Workhour:', workhour);
 
     if (!workhour) {
       return { slots, is_day_off: false };
@@ -73,7 +83,10 @@ export class FilterTimeslot implements TimeslotOutAdapter {
       return { slots: [], is_day_off: true };
     }
 
-    const filteredSlots = slots.filter((slot) => workhour.isSlotWithin(slot));
+    const filteredSlots = slots.filter((slot) => {
+      const within = workhour.isSlotWithin(slot);
+      return within;
+    });
 
     return { slots: filteredSlots, is_day_off: false };
   }

@@ -33,11 +33,10 @@ export class Workhour {
     const closeTimestamp = dayStart + this.close_interval;
 
     return (
-      timeslot.getBeginAt() >= openTimestamp &&
-      timeslot.getEndAt() <= closeTimestamp
+      timeslot.getBeginAt() >= openTimestamp && // 시작 시간이 영업 시간 시작 이후
+      timeslot.getEndAt() <= closeTimestamp // 종료 시간이 영업 시간 종료 이전
     );
   }
-
   /**
    * JSON 데이터를 기반으로 Workhour 인스턴스 생성
    */

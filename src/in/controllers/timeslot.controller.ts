@@ -20,9 +20,7 @@ export class TimeslotController implements TimeslotInAdapter {
       })),
     }));
   }
-  /**
-   * TimeslotInAdapter에서 정의한 메서드 구현
-   */
+
   @Post()
   async getTimeSlots(@Body() requestBody: RequestBody): Promise<ResponseBody> {
     const dayTimetableDtos = await this.timeslotService.generateTimeSlots(
