@@ -30,7 +30,7 @@ README
 
 	1.	프로젝트 클론
 
-git clone <repository-url>
+git clone https://github.com/yunmi099/colavo-assignment.git
 cd colavo-server
 
 
@@ -41,7 +41,7 @@ npm install
 
 	3.	서버 실행
 
-npm run start
+npm start
 
 서버는 기본적으로 localhost:3000에서 실행됩니다. 실행 후 브라우저에서 http://localhost:3000으로 접속하여 서버가 잘 동작하는지 확인할 수 있습니다.
 
@@ -65,10 +65,5 @@ npm test
 	3.	개별 테스트 파일 실행
 특정 테스트 파일만 실행하고 싶다면 아래 명령어로 지정할 수 있습니다.
 
-npx jest test/domains/services/timeslot.service.spec.ts
+npm test test/domains/services/timeslot.service.spec.ts
 
-
-	4.	테스트 코드 수정
-테스트 코드 수정 후 다시 실행하면, 코드 변경 사항이 제대로 동작하는지 확인할 수 있습니다.
-
-이 README 파일을 통해 프로젝트의 주요 내용과 실행 방법을 안내했습니다. 추가적인 수정이나 테스트가 필요하면 해당 부분을 수정하여 다시 실행해보세요!
