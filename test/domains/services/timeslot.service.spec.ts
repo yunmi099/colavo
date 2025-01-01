@@ -3,6 +3,7 @@ import { TimeslotService } from '../../../src/domains/timeslot/domain/services/t
 import { TimeslotOutAdapter } from '../../../src/domains/timeslot/out/adapter/timeslotOutAdapter';
 import { TimeslotParameter } from '../../../src/domains/timeslot/domain/dto/timeslot-parameter.dto';
 import { Timeslot } from '../../../src/domains/timeslot/domain/entity/timeslot';
+import { convertToUnixTimestamp } from 'src/domains/common/utils/time.util';
 
 describe('TimeslotService', () => {
   let service: TimeslotService;
@@ -28,6 +29,74 @@ describe('TimeslotService', () => {
 
     service = module.get<TimeslotService>(TimeslotService);
   });
+
+  describe.each([
+    {
+      date: '20210509',
+      dayOfWeek: 0,
+      expectedTimeslots: [
+        { begin_at: 1620518400, end_at: 1620522000 },
+        { begin_at: 1620520200, end_at: 1620523800 },
+      ],
+      is_day_off: false,
+    },
+    {
+      date: '20210510',
+      dayOfWeek: 1,
+      expectedTimeslots: [
+        { begin_at: 1620604800, end_at: 1620608400 },
+        { begin_at: 1620606600, end_at: 1620610200 },
+      ],
+      is_day_off: false,
+    },
+    {
+      date: '20210511',
+      dayOfWeek: 2,
+      expectedTimeslots: [],
+      is_day_off: true,
+    },
+  ])(
+    'TimeslotService - $date',
+    ({ date, dayOfWeek, expectedTimeslots, is_day_off }) => {
+      it(`should return correct timeslots for ${date}`, async () => {
+        const parameter = new TimeslotParameter({
+          start_day_identifier: date,
+          timezone_identifier: 'Asia/Seoul',
+          service_duration: 3600,
+          days: 1,
+          timeslot_interval: 1800,
+          is_ignore_schedule: false,
+          is_ignore_workhour: false,
+        });
+
+        const mockTimeslots = expectedTimeslots.map(
+          (slot) => new Timeslot(slot.begin_at, slot.end_at),
+        );
+
+        outAdapterMock.filterSlotsByEvents.mockImplementation((slots) => slots);
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        outAdapterMock.filterSlotsByWorkhour.mockImplementation((slots) => {
+          if (dayOfWeek === 0 || dayOfWeek === 1) {
+            return { slots: mockTimeslots, is_day_off: false };
+          }
+          return { slots: [], is_day_off: true };
+        });
+
+        const expectedStartOfDay = convertToUnixTimestamp(`${date}`);
+
+        const result = await service.generateTimeSlots(parameter);
+
+        expect(result).toEqual([
+          {
+            start_of_day: expectedStartOfDay,
+            day_modifier: 0,
+            is_day_off,
+            timeslots: expectedTimeslots,
+          },
+        ]);
+      });
+    },
+  );
 
   it('should generate timeslots with is_ignore_schedule = true', async () => {
     const parameter = new TimeslotParameter({
