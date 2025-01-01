@@ -1,99 +1,74 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+README
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+1. 과제 
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+이 프로젝트는 일정 시간 간격으로 타임슬롯을 생성하고, 주어진 일정과 근무시간 정보를 기반으로 타임슬롯을 필터링하는 기능을 구현하는 것입니다. 주요 목표는 TimeslotService를 구현하고, 이를 기반으로 타임슬롯을 생성하고 특정 조건을 만족하는 타임슬롯을 반환하는 것입니다. 또한, 여러 날짜에 대한 타임슬롯을 다루고, 이를 테스트하는 코드도 작성되었습니다.
 
-## Description
+2. 구현 방식
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+주요 기능
 
-## Project setup
+	•	Timeslot 생성: 주어진 시작일과 시간 간격, 서비스 기간 등을 기반으로 타임슬롯을 생성합니다.
+	•	Workhour와 Event 필터링: 생성된 타임슬롯을 근무 시간(Workhour)과 이벤트(Event) 정보를 기준으로 필터링합니다.
+	•	날짜 처리: 날짜 형식을 UNIX 타임스탬프(초 단위)로 변환하여 정확한 시간 계산을 보장합니다.
 
-```bash
-$ npm install
-```
+주요 클래스
 
-## Compile and run the project
+	1.	TimeslotService: 타임슬롯을 생성하고 필터링하는 핵심 서비스입니다.
+	2.	Timeslot: 타임슬롯의 시작 시간과 종료 시간을 나타내는 엔티티 클래스입니다.
+	3.	Workhour: 근무 시간 정보를 나타내는 클래스입니다. 타임슬롯이 근무 시간 내에 있는지 여부를 검사합니다.
+	4.	Event: 일정 이벤트 정보를 나타내며, 타임슬롯이 이벤트와 겹치는지 확인하는 기능을 제공합니다.
+	5.	FilterTimeslot: 주어진 Timeslot들을 이벤트와 근무 시간을 기준으로 필터링하는 어댑터입니다.
 
-```bash
-# development
-$ npm run start
+기능 흐름
 
-# watch mode
-$ npm run start:dev
+	1.	TimeslotService는 TimeslotParameter를 받아, 시작일과 간격 등을 기반으로 여러 개의 타임슬롯을 생성합니다.
+	2.	생성된 타임슬롯은 FilterTimeslot을 사용하여, 근무 시간(Workhour)과 이벤트(Event)를 고려하여 필터링됩니다.
+	3.	필터링된 타임슬롯은 결과로 반환됩니다.
 
-# production mode
-$ npm run start:prod
-```
+3. 서버 켜는 법
 
-## Run tests
+	1.	프로젝트 클론
 
-```bash
-# unit tests
-$ npm run test
+git clone <repository-url>
+cd colavo-server
 
-# e2e tests
-$ npm run test:e2e
 
-# test coverage
-$ npm run test:cov
-```
+	2.	필요한 패키지 설치
 
-## Deployment
+npm install
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+	3.	서버 실행
 
-```bash
-$ npm install -g mau
-$ mau deploy
-```
+npm run start
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+서버는 기본적으로 localhost:3000에서 실행됩니다. 실행 후 브라우저에서 http://localhost:3000으로 접속하여 서버가 잘 동작하는지 확인할 수 있습니다.
 
-## Resources
+	4.	배포 준비 (선택 사항)
+프로젝트가 준비되면 배포를 위해 build 명령어를 실행할 수 있습니다.
 
-Check out a few resources that may come in handy when working with NestJS:
+npm run build
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+빌드 후, dist 폴더가 생성되며, 이를 배포 서버에 올려 실행할 수 있습니다.
 
-## Support
+4. 테스트 코드 실행 방법
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+	1.	테스트 코드 실행
+테스트를 실행하려면 아래 명령어를 사용하세요.
 
-## Stay in touch
+npm test
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
 
-## License
+	2.	테스트 실행 후 결과 확인
+테스트가 실행되면 test 폴더 내의 모든 테스트가 실행됩니다. 각 테스트가 어떻게 진행되는지 로그를 통해 확인할 수 있으며, 실패한 테스트에 대해서는 오류 메시지를 통해 원인을 파악할 수 있습니다.
+	3.	개별 테스트 파일 실행
+특정 테스트 파일만 실행하고 싶다면 아래 명령어로 지정할 수 있습니다.
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+npx jest test/domains/services/timeslot.service.spec.ts
+
+
+	4.	테스트 코드 수정
+테스트 코드 수정 후 다시 실행하면, 코드 변경 사항이 제대로 동작하는지 확인할 수 있습니다.
+
+이 README 파일을 통해 프로젝트의 주요 내용과 실행 방법을 안내했습니다. 추가적인 수정이나 테스트가 필요하면 해당 부분을 수정하여 다시 실행해보세요!
