@@ -49,6 +49,9 @@ export class TimeslotService {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const dayEndUnix = currentDayEnd.toSeconds();
 
+      // 요일 매핑 (Luxon weekday is 1 = Monday, 7 = Sunday)
+      const dayOfWeek = this.getMappedDayOfWeek(currentDayStart.weekday);
+
       // [1] 기본 타임슬롯 생성
       let allSlots = Timeslot.createDailyTimeslots(
         dayStartUnix,
@@ -67,7 +70,7 @@ export class TimeslotService {
         const { slots, is_day_off: dayOff } =
           this.outAdapter.filterSlotsByWorkhour(
             allSlots,
-            currentDayStart.weekday,
+            dayOfWeek, // 매핑된 요일을 사용
           );
         allSlots = slots;
         is_day_off = dayOff;
@@ -82,5 +85,19 @@ export class TimeslotService {
     }
 
     return results;
+  }
+
+  // 요일을 요구사항에 맞게 매핑
+  private getMappedDayOfWeek(weekday: number): number {
+    const dayMapping: { [key: number]: number } = {
+      7: 1, // Sunday -> 1
+      1: 2, // Monday -> 2
+      2: 3, // Tuesday -> 3
+      3: 4, // Wednesday -> 4
+      4: 5, // Thursday -> 5
+      5: 6, // Friday -> 6
+      6: 7, // Saturday -> 7
+    };
+    return dayMapping[weekday];
   }
 }
