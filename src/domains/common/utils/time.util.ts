@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon';
 
-export const convertToUnixTimestamp = (
+export const getDayInTimezone = (
   start_day_identifier: string,
   timezone_identifier: string,
 ): DateTime => {

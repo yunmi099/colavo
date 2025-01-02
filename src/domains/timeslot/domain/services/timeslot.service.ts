@@ -3,7 +3,7 @@ import { TimeslotParameter } from '../dto/timeslot-parameter.dto';
 import { DayTimetableDto } from '../dto/date-timatable.dto';
 import { TimeslotOutAdapter } from '../../out/adapter/timeslotOutAdapter';
 import { Timeslot } from '../entity/timeslot';
-import { convertToUnixTimestamp } from 'src/domains/common/utils/time.util';
+import { getDayInTimezone } from 'src/domains/common/utils/time.util';
 
 @Injectable()
 export class TimeslotService {
@@ -26,7 +26,7 @@ export class TimeslotService {
     } = requestBody;
 
     // 주어진 시간대의 시작 날짜와 시간 생성
-    const startDateTime = convertToUnixTimestamp(
+    const startDateTime = getDayInTimezone(
       start_day_identifier,
       timezone_identifier,
     );
