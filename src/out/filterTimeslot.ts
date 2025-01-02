@@ -73,8 +73,6 @@ export class FilterTimeslot implements TimeslotOutAdapter {
   ): { slots: Timeslot[]; is_day_off: boolean } {
     const workhour = this.workhours.find((wh) => wh.isForDay(dayOfWeek));
 
-    console.log('Found Workhour:', workhour);
-
     if (!workhour) {
       return { slots, is_day_off: false };
     }
